@@ -1,0 +1,6 @@
+name: Teba
+version: 1.0.0
+api: 4.0.0
+main: Zonasky\Timber\Main
+author: ["Inaayat", "skyss0fly"]
+description: Instantly chops down trees with Timber

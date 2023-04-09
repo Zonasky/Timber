@@ -32,5 +32,4 @@
 <p>Timber was developed by <a href="https://github.com/Inaay">Inaayat</a> and <a href="https://github.com/skyss0fly">skyss0fly</a>.</p>
 
 <h2>License</h2>
-<p>Timber is released under the MIT License. See LICENSE for more information.</p>
 <p>Timber is released under the <a href="https://github.com/Zonasky/Timber/blob/main/LICENSE">MIT License</a>. See LICENSE for more information.</p>

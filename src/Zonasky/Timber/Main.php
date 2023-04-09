@@ -19,6 +19,7 @@ class Main extends PluginBase implements Listener {
         $this->saveDefaultConfig();
         $this->loadConfig();
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
+              $this->getLogger()->info("Timber By Zonasky Enabled");
     }
 
     private function loadConfig(): void {

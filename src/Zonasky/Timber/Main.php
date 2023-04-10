@@ -6,36 +6,30 @@ use pocketmine\block\Block;
 use pocketmine\block\BlockLegacyIds;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\Listener;
-use pocketmine\player\Player;
+use pocketmine\math\Vector3;
 use pocketmine\plugin\PluginBase;
 
 class Main extends PluginBase implements Listener {
 
     private $worlds;
     private $message;
-	public const PREFIX = "§7[§cTimber§7] §r";
+
+	public function onLoad(): void {
+		$this->saveDefaultConfig();
+	}
 
     public function onEnable(): void {
-        $this->saveDefaultConfig();
+		$this->getServer()->getPluginManager()->registerEvents($this, $this);
         $this->loadConfig();
-        $this->getServer()->getPluginManager()->registerEvents($this, $this);
-              $this->getLogger()->info("Timber By Zonasky Enabled");
     }
 
     private function loadConfig(): void {
         $config = $this->getConfig();
-        $this->worlds = $config->get("world", []);
-        $this->message = $config->get("message", "");
+        $this->worlds = $config->get("worlds", []);
     }
 
     private function isTimberWorld(string $worldName): bool {
         return in_array($worldName, $this->worlds);
-    }
-
-    private function sendMessage(Player $player, int $count): void {
-        $message = str_replace("{count}", $count, $this->message);
-		$message = str_replace("&", "§", $this->message);
-        $player->sendMessage(self::PREFIX . $message);
     }
 
     public function onBlockBreak(BlockBreakEvent $event) {
@@ -46,24 +40,33 @@ class Main extends PluginBase implements Listener {
             return;
         }
         if ($block->getId() == BlockLegacyIds::LOG || $block->getId() == BlockLegacyIds::LOG2) {
-            $this->timber($block, $player);
+            $treeBlocks = $this->getTreeBlocks($block);
+            $level = $block->getPosition()->getWorld();
+            foreach ($treeBlocks as $treeBlock) {
+                $level->useBreakOn($treeBlock->getPosition());
+            }
         }
     }
 
-    public function timber(Block $block, Player $player) {
-        $item = $player->getInventory()->getItemInHand();
-        $logCount = 0;
-        for ($i = 0; $i <= 5; $i++) {
-            $side = $block->getSide($i);
-            if ($side->getId() !== BlockLegacyIds::LOG && $side->getId() !== BlockLegacyIds::LOG2) {
-                continue;
+	private function getTreeBlocks(Block $block): array {
+        $level = $block->getPosition()->getWorld();
+        $blocks = [$block];
+        for ($y = $block->getPosition()->getY() + 1; $y <= $level->getMaxY(); $y++) {
+            $blockAbove = $level->getBlock(new Vector3($block->getPosition()->getX(), $y, $block->getPosition()->getZ()));
+            if ($blockAbove->getId() == BlockLegacyIds::LOG || $block->getId() == BlockLegacyIds::LOG2) {
+                $blocks[] = $blockAbove;
+            } else {
+                break;
             }
-            $player->getWorld()->useBreakOn($side->getPosition(), $item, $player);
-            $logCount++;
-            $this->timber($side, $player);
         }
-        if ($logCount > 0 && $this->message !== "") {
-            $this->sendMessage($player, $logCount);
+        for ($y = $block->getPosition()->getY() - 1; $y >= 0; $y--) {
+            $blockBelow = $level->getBlock(new Vector3($block->getPosition()->getX(), $y, $block->getPosition()->getZ()));
+            if ($blockBelow->getId() == BlockLegacyIds::LOG || $block->getId() == BlockLegacyIds::LOG2) {
+                $blocks[] = $blockBelow;
+            } else {
+                break;
+            }
         }
+        return $blocks;
     }
 }

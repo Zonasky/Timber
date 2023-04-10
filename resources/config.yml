@@ -1,11 +1,6 @@
 # Timber Config
 
-# Add the names of the worlds where Timber should work.
-# Specify the folder name of each world.
+# Specify the folder name of each world where Timber should work on.
 worlds:
 - world
-
-# Send a message to the player when they cut down a tree.
-# Use {count} to display the number of logs chopped.
-# Use & for colors
-message: The tree you just cut down contains {count} logs.
+- anotherworld

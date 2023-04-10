@@ -10,7 +10,7 @@
 
 <h2>Installation</h2>
 <ol>
-  <li>Download the latest release of Timber from the <a href="https://poggit.pmmp.io/ci/YourUsername/Timber/Timber">Poggit page.</a></li>
+  <li>Download the latest release of Timber from the <a href="https://poggit.pmmp.io/p/Timber">Poggit page.</a></li>
   <li>Add the plugin to your PocketMine plugins directory.</li>
   <li>Restart your PocketMine server.</li>
 </ol> 

@@ -4,5 +4,6 @@ branches:
 - main
 projects:
   Timber:
+    icon: meta/icon.png
     path: ""
 ...

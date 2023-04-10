@@ -12,7 +12,6 @@ use pocketmine\plugin\PluginBase;
 class Main extends PluginBase implements Listener {
 
     private $worlds;
-    private $message;
 
 	public function onLoad(): void {
 		$this->saveDefaultConfig();

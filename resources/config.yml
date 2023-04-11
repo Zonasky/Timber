@@ -4,3 +4,6 @@
 worlds:
 - world
 - anotherworld
+
+# Makes leaves chops aswell when chops down trees
+leaves: true

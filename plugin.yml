@@ -1,5 +1,5 @@
 name: Timber
-version: 1.1.0
+version: 1.0.0
 api: 4.0.0
 main: Zonasky\Timber\Main
 author: ["Inaayat", "skyss0fly"]

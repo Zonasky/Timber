@@ -58,18 +58,18 @@ class Main extends PluginBase implements Listener {
 	private function getTreeBlocks(Block $block): array {
         $world = $block->getPosition()->getWorld();
         $blocks = [$block];
-        for ($y = $block->getPosition()->getY() + 1; $y <= $world->getMaxY(); $y++) {
-            $blockAbove = $world->getBlock(new Vector3($block->getPosition()->getX(), $y, $block->getPosition()->getZ()));
-            if ($blockAbove->getId() == BlockLegacyIds::LOG || $block->getId() == BlockLegacyIds::LOG2) {
-                $blocks[] = $blockAbove;
+        for ($y = $block->getPosition()->getY() - 1; $y >= $world->getMinY(); $y--) {
+            $blockBelow = $world->getBlock(new Vector3($block->getPosition()->getX(), $y, $block->getPosition()->getZ()));
+            if ($blockBelow->getId() == BlockLegacyIds::LOG || $blockBelow->getId() == BlockLegacyIds::LOG2) {
+                $blocks[] = $blockBelow;
             } else {
                 break;
             }
         }
-        for ($y = $block->getPosition()->getY() - 1; $y >= 0; $y--) {
-            $blockBelow = $world->getBlock(new Vector3($block->getPosition()->getX(), $y, $block->getPosition()->getZ()));
-            if ($blockBelow->getId() == BlockLegacyIds::LOG || $block->getId() == BlockLegacyIds::LOG2) {
-                $blocks[] = $blockBelow;
+        for ($y = $block->getPosition()->getY() + 1; $y <= $world->getMaxY(); $y++) {
+            $blockAbove = $world->getBlock(new Vector3($block->getPosition()->getX(), $y, $block->getPosition()->getZ()));
+            if ($blockAbove->getId() == BlockLegacyIds::LOG || $blockAbove->getId() == BlockLegacyIds::LOG2) {
+                $blocks[] = $blockAbove;
             } else {
                 break;
             }

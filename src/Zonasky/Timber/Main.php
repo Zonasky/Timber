@@ -25,6 +25,7 @@ class Main extends PluginBase implements Listener {
     private function loadConfig(): void {
         $config = $this->getConfig();
         $this->worlds = $config->get("worlds", []);
+        $this->toolsallowed = $config->get("toolsallowed", []);
     }
 
     private function isTimberWorld(string $worldName): bool {

@@ -8,6 +8,6 @@ worlds:
 # Makes leaves chops aswell when chops down trees
 leaves: true
 
-#Tools This plugin will work for. if a tool name is not there it wont work. 
+#Tools This plugin will work for. if a tool name is not there it wont work. Coming soon!
 toolsallowed:
 - "Wooden Axe"

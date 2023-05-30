@@ -3,7 +3,7 @@
 namespace Zonasky\Timber;
 
 use pocketmine\block\Block;
-use pocketmine\block\BlockLegacyIds;
+use pocketmine\block\BlockTypeIds;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\Listener;
 use pocketmine\math\Vector3;
@@ -39,7 +39,7 @@ class Main extends PluginBase implements Listener {
         if (!$this->isTimberWorld($worldName)) {
             return;
         }
-        if ($block->getId() == BlockLegacyIds::LOG || $block->getId() == BlockLegacyIds::LOG2) {
+        if ($block->getId() == BlockTypeIds::LOG || $block->getId() == BlockTypeIds::LOG2) {
             $treeBlocks = $this->getTreeBlocks($block);
             $world = $block->getPosition()->getWorld();
             $leaves = [];

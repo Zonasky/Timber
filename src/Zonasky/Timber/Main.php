@@ -15,7 +15,7 @@ class Main extends PluginBase implements Listener {
 
 	public function onLoad(): void {
 		$this->saveDefaultConfig();
-        $this->getLogger()->warning('This is a PM4 Release of Timber. and support for PM4 will discontinue: August 1st')
+        $this->getLogger()->warning('This is a PM4 Release of Timber. and support for PM4 will discontinue: August 1st');
 	}
 
     public function onEnable(): void {

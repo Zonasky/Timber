@@ -19,17 +19,13 @@ declare(strict_types=1);
 namespace Zonasky\Timber;
 
 use pocketmine\block\Block;
+use pocketmine\block\VanillaBlocks;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\Listener;
 use pocketmine\math\Vector3;
 use pocketmine\plugin\PluginBase;
 
 class Main extends PluginBase implements Listener {
-
-	// 17 | BlockLegacyIds::LOG
-	// 162 | BlockLegacyIds::LOG2
-	// 18 | BlockLegacyIds::LEAVES
-	// 161 | BlockLegacyIds::LEAVES2
 
 	private $worlds;
 
@@ -59,7 +55,7 @@ class Main extends PluginBase implements Listener {
 		if (!$this->isTimberWorld($worldName)) {
 			return;
 		}
-		if ($block->getTypeId() == 17 || $block->getTypeId() == 162) {
+		if ($block->getTypeId() == VanillaBlocks::OAK_LOG()->getTypeId() || VanillaBlocks::SPRUCE_LOG()->getTypeId() || VanillaBlocks::BIRCH_LOG()->getTypeId() || VanillaBlocks::JUNGLE_LOG()->getTypeId() || VanillaBlocks::ACACIA_LOG()->getTypeId() || VanillaBlocks::DARK_OAK_LOG()->getTypeId()) {
 			$treeBlocks = $this->getTreeBlocks($block);
 			$world = $block->getPosition()->getWorld();
 			$leaves = [];
@@ -81,7 +77,7 @@ class Main extends PluginBase implements Listener {
 		$blocks = [$block];
 		for ($y = $block->getPosition()->getY() - 1; $y >= $world->getMinY(); $y--) {
 			$blockBelow = $world->getBlock(new Vector3($block->getPosition()->getX(), $y, $block->getPosition()->getZ()));
-			if ($blockBelow->getTypeId() == 17 || $blockBelow->getTypeId() == 162) {
+			if ($block->getTypeId() == VanillaBlocks::OAK_LOG()->getTypeId() || VanillaBlocks::SPRUCE_LOG()->getTypeId() || VanillaBlocks::BIRCH_LOG()->getTypeId() || VanillaBlocks::JUNGLE_LOG()->getTypeId() || VanillaBlocks::ACACIA_LOG()->getTypeId() || VanillaBlocks::DARK_OAK_LOG()->getTypeId()) {
 				$blocks[] = $blockBelow;
 			} else {
 				break;
@@ -89,7 +85,7 @@ class Main extends PluginBase implements Listener {
 		}
 		for ($y = $block->getPosition()->getY() + 1; $y <= $world->getMaxY(); $y++) {
 			$blockAbove = $world->getBlock(new Vector3($block->getPosition()->getX(), $y, $block->getPosition()->getZ()));
-			if ($blockAbove->getTypeId() == 17 || $blockAbove->getTypeId() == 162) {
+			if ($block->getTypeId() == VanillaBlocks::OAK_LOG()->getTypeId() || VanillaBlocks::SPRUCE_LOG()->getTypeId() || VanillaBlocks::BIRCH_LOG()->getTypeId() || VanillaBlocks::JUNGLE_LOG()->getTypeId() || VanillaBlocks::ACACIA_LOG()->getTypeId() || VanillaBlocks::DARK_OAK_LOG()->getTypeId()) {
 				$blocks[] = $blockAbove;
 			} else {
 				break;
@@ -113,7 +109,7 @@ class Main extends PluginBase implements Listener {
 				for ($y = $current->getPosition()->getY() - 1; $y <= $current->getPosition()->getY() + 1; $y++) {
 					for ($z = $current->getPosition()->getZ() - 1; $z <= $current->getPosition()->getZ() + 1; $z++) {
 						$leaf = $world->getBlock(new Vector3($x, $y, $z));
-						if ($leaf->getTypeId() == 18 || $leaf->getTypeId() == 161) {
+						if ($leaf->getTypeId() == VanillaBlocks::OAK_LEAVES()->getTypeId() || VanillaBlocks::SPRUCE_LEAVES()->getTypeId() || VanillaBlocks::BIRCH_LEAVES()->getTypeId() || VanillaBlocks::JUNGLE_LEAVES()->getTypeId() || VanillaBlocks::ACACIA_LEAVES()->getTypeId() || VanillaBlocks::DARK_OAK_LEAVES()->getTypeId()){
 							$blocks[] = $leaf;
 							$queue[] = $leaf;
 						}

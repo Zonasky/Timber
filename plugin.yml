@@ -1,6 +1,7 @@
 name: Timber
-version: 2.1.0
-api: 4.0.0
+version: 2.2.0
+api: 5.0.0
 main: Zonasky\Timber\Main
 author: ["Inaayat", "skyss0fly"]
 description: Instantly chops down trees with Timber
+website: https://github.com/Zonasky/Timber

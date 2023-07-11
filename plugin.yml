@@ -5,3 +5,8 @@ main: Zonasky\Timber\Main
 author: ["Inaayat", "skyss0fly"]
 description: Instantly chops down trees with Timber
 website: https://github.com/Zonasky/Timber
+commands: 
+  timber:
+    Permission: Timber.use
+    Default: op
+    Description: "Use this to chop down trees with timber"

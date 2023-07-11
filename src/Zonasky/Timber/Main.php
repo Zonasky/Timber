@@ -48,14 +48,14 @@ class Main extends PluginBase implements Listener {
 		return in_array($worldName, $this->worlds);
 	}
 	public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool {
-        if (!$sender instanceof Player) {
-            $this->getLogger()->warning("Please use this command in-game");
+        if(!$sender->hasPermission("timber.use") && !$sender insanceof Player) {
+	$this->getLogger()->warning("Please use this command in-game");	
 	}
-        if(!$sender->hasPermission($this->getPermissions()[0])) {
-            $sender->sendMessage("§c> You do not have permission to use this command!");
-            return;
-        } else {
-		
+		elif(!$sender->hasPermission("timber.use")) { 
+
+			}
+         else {
+		$sender->sendMessage("§c> You do not have permission to use this command!");
 	}	
 	public function onBlockBreak(BlockBreakEvent $event): void {
 		$player = $event->getPlayer();

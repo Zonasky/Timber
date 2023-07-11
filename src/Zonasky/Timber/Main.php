@@ -52,7 +52,7 @@ class Main extends PluginBase implements Listener {
 	$this->getLogger()->warning("Please use this command in-game");	
 	}
 		elif(!$sender->hasPermission("timber.use")) { 
-$axe = VanillaItems::WOODEN_AXE();
+$axe = VanillaItems::WOODEN_AXE()->setCustomName("§6Timber§gAxe")
         $player->getInventory()->addItem($axe);
 			}
          else {

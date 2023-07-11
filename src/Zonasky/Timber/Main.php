@@ -64,7 +64,7 @@ $axe = VanillaItems::WOODEN_AXE()->setCustomName("§6Timber§gAxe")
 		$player = $event->getPlayer();
 		$block = $event->getBlock();
 		$worldName = $block->getPosition()->getWorld()->getFolderName();
-		if (!$this->isTimberWorld($worldName) {
+		if (!$this->isTimberWorld($worldName)){
 			return;
 		}
 if ($player->hasPermission("timber.use")) {

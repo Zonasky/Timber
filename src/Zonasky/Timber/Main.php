@@ -47,7 +47,12 @@ class Main extends PluginBase implements Listener {
 	private function isTimberWorld(string $worldName): bool {
 		return in_array($worldName, $this->worlds);
 	}
-
+	public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool {
+        if (!$sender instanceof Player) {
+            $this->getLogger()->warning("Please use this command in-game");
+	}
+        elif (!sender haspemission Timber.use) {
+		
 	public function onBlockBreak(BlockBreakEvent $event): void {
 		$player = $event->getPlayer();
 		$block = $event->getBlock();

@@ -51,8 +51,12 @@ class Main extends PluginBase implements Listener {
         if (!$sender instanceof Player) {
             $this->getLogger()->warning("Please use this command in-game");
 	}
-        elif (!sender haspemission Timber.use) {
+        if(!$sender->hasPermission($this->getPermissions()[0])) {
+            $sender->sendMessage("§c> You do not have permission to use this command!");
+            return;
+        } else {
 		
+	}	
 	public function onBlockBreak(BlockBreakEvent $event): void {
 		$player = $event->getPlayer();
 		$block = $event->getBlock();

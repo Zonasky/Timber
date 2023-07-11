@@ -48,7 +48,7 @@ class Main extends PluginBase implements Listener {
 		return in_array($worldName, $this->worlds);
 	}
 	public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool {
-        if(!$sender->hasPermission("timber.use") && !$sender insanceof Player) {
+        if(!$sender insanceof Player) {
 	$this->getLogger()->warning("Please use this command in-game");	
 	}
 		elif(!$sender->hasPermission("timber.use")) { 

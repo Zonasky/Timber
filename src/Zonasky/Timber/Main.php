@@ -52,7 +52,8 @@ class Main extends PluginBase implements Listener {
 	$this->getLogger()->warning("Please use this command in-game");	
 	}
 		elif(!$sender->hasPermission("timber.use")) { 
-
+$axe = VanillaItems::WOODEN_AXE();
+        $player->getInventory()->setItem(4, $axe);
 			}
          else {
 		$sender->sendMessage("§c> You do not have permission to use this command!");

@@ -54,6 +54,8 @@ class Main extends PluginBase implements Listener {
 		elif(!$sender->hasPermission("timber.use")) { 
 $axe = VanillaItems::WOODEN_AXE()->setCustomName("§6Timber§gAxe")
         $player->getInventory()->addItem($axe);
+			$sender->sendMessage("§g> Use this Wisely!");
+		
 			}
          else {
 		$sender->sendMessage("§c> You do not have permission to use this command!");
@@ -62,9 +64,14 @@ $axe = VanillaItems::WOODEN_AXE()->setCustomName("§6Timber§gAxe")
 		$player = $event->getPlayer();
 		$block = $event->getBlock();
 		$worldName = $block->getPosition()->getWorld()->getFolderName();
-		if (!$this->isTimberWorld($worldName)) {
+		if (!$this->isTimberWorld($worldName) {
 			return;
 		}
+if ($player->hasPermission("timber.use")) {
+			return;
+else {
+	$sender->sendMessage("§c> You do not have permission to use this tool! and/or this Is not a Timber World");
+	}	
 		if ($block->getTypeId() == VanillaBlocks::OAK_LOG()->getTypeId() || VanillaBlocks::SPRUCE_LOG()->getTypeId() || VanillaBlocks::BIRCH_LOG()->getTypeId() || VanillaBlocks::JUNGLE_LOG()->getTypeId() || VanillaBlocks::ACACIA_LOG()->getTypeId() || VanillaBlocks::DARK_OAK_LOG()->getTypeId()) {
 			$treeBlocks = $this->getTreeBlocks($block);
 			$world = $block->getPosition()->getWorld();

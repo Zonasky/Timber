@@ -53,7 +53,7 @@ class Main extends PluginBase implements Listener {
 	}
 		elif(!$sender->hasPermission("timber.use")) { 
 $axe = VanillaItems::WOODEN_AXE();
-        $player->getInventory()->setItem(4, $axe);
+        $player->getInventory()->addItem($axe);
 			}
          else {
 		$sender->sendMessage("§c> You do not have permission to use this command!");

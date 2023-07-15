@@ -28,24 +28,24 @@ class Main extends PluginBase implements Listener {
 
 	private $worlds;
 	private $logTypes = [
-		VanillaBlocks::OAK_LOG,
-		VanillaBlocks::SPRUCE_LOG,
-		VanillaBlocks::BIRCH_LOG,
-		VanillaBlocks::JUNGLE_LOG,
-		VanillaBlocks::ACACIA_LOG,
-		VanillaBlocks::DARK_OAK_LOG,
-		VanillaBlocks::MANGROVE_LOG,
-		VanillaBlocks::CHERRY_LOG
+		VanillaBlocks::OAK_LOG()->getTypeId(),
+		VanillaBlocks::SPRUCE_LOG()->getTypeId(),
+		VanillaBlocks::BIRCH_LOG()->getTypeId(),
+		VanillaBlocks::JUNGLE_LOG()->getTypeId(),
+		VanillaBlocks::ACACIA_LOG()->getTypeId(),
+		VanillaBlocks::DARK_OAK_LOG()->getTypeId(),
+		VanillaBlocks::MANGROVE_LOG()->getTypeId(),
+		VanillaBlocks::CHERRY_LOG()->getTypeId()
 	];
 	private $leafTypes = [
-		VanillaBlocks::OAK_LEAVES,
-		VanillaBlocks::SPRUCE_LEAVES,
-		VanillaBlocks::BIRCH_LEAVES,
-		VanillaBlocks::JUNGLE_LEAVES,
-		VanillaBlocks::ACACIA_LEAVES,
-		VanillaBlocks::DARK_OAK_LEAVES,
-		VanillaBlocks::MANGROVE_LEAVES,
-		VanillaBlocks::CHERRY_LEAVES
+		VanillaBlocks::OAK_LEAVES()->getTypeId(),
+		VanillaBlocks::SPRUCE_LEAVES()->getTypeId(),
+		VanillaBlocks::BIRCH_LEAVES()->getTypeId(),
+		VanillaBlocks::JUNGLE_LEAVES()->getTypeId(),
+		VanillaBlocks::ACACIA_LEAVES()->getTypeId(),
+		VanillaBlocks::DARK_OAK_LEAVES()->getTypeId(),
+		VanillaBlocks::MANGROVE_LEAVES()->getTypeId(),
+		VanillaBlocks::CHERRY_LEAVES()->getTypeId()
 	];
 
 	/**

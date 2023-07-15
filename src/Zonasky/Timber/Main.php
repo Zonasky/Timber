@@ -7,7 +7,6 @@
  *  ██ ██ ██  ██ ███████ ███████   ████   ███████    ██
  *  ██ ██  ██ ██ ██   ██ ██   ██    ██    ██   ██    ██
  *  ██ ██   ████ ██   ██ ██   ██    ██    ██   ██    ██
-
  *
  * @author Inaayat
  * @link https://github.com/Inaay
@@ -28,26 +27,62 @@ use pocketmine\plugin\PluginBase;
 class Main extends PluginBase implements Listener {
 
 	private $worlds;
+	private $logTypes = [
+		VanillaBlocks::OAK_LOG,
+		VanillaBlocks::SPRUCE_LOG,
+		VanillaBlocks::BIRCH_LOG,
+		VanillaBlocks::JUNGLE_LOG,
+		VanillaBlocks::ACACIA_LOG,
+		VanillaBlocks::DARK_OAK_LOG,
+		VanillaBlocks::MANGROVE_LOG,
+		VanillaBlocks::CHERRY_LOG
+	];
+	private $leafTypes = [
+		VanillaBlocks::OAK_LEAVES,
+		VanillaBlocks::SPRUCE_LEAVES,
+		VanillaBlocks::BIRCH_LEAVES,
+		VanillaBlocks::JUNGLE_LEAVES,
+		VanillaBlocks::ACACIA_LEAVES,
+		VanillaBlocks::DARK_OAK_LEAVES,
+		VanillaBlocks::MANGROVE_LEAVES,
+		VanillaBlocks::CHERRY_LEAVES
+	];
 
+	/**
+	 * @return void
+	 */
 	public function onLoad(): void {
 		$this->saveDefaultConfig();
 	}
 
+	/**
+	 * @return void
+	 */
 	public function onEnable(): void {
 		$this->getServer()->getPluginManager()->registerEvents($this, $this);
 		$this->loadConfig();
 	}
 
+	/**
+	 * @return void
+	 */
 	private function loadConfig(): void {
 		$config = $this->getConfig();
 		$this->worlds = $config->get("worlds", []);
-
 	}
 
+	/**
+	 * @param string $worldName
+	 * @return bool
+	 */
 	private function isTimberWorld(string $worldName): bool {
 		return in_array($worldName, $this->worlds);
 	}
 
+	/**
+	 * @param BlockBreakEvent $event
+	 * @return void
+	 */
 	public function onBlockBreak(BlockBreakEvent $event): void {
 		$player = $event->getPlayer();
 		$block = $event->getBlock();
@@ -55,7 +90,7 @@ class Main extends PluginBase implements Listener {
 		if (!$this->isTimberWorld($worldName)) {
 			return;
 		}
-		if ($block->getTypeId() == VanillaBlocks::OAK_LOG()->getTypeId() || VanillaBlocks::SPRUCE_LOG()->getTypeId() || VanillaBlocks::BIRCH_LOG()->getTypeId() || VanillaBlocks::JUNGLE_LOG()->getTypeId() || VanillaBlocks::ACACIA_LOG()->getTypeId() || VanillaBlocks::DARK_OAK_LOG()->getTypeId()) {
+		if (in_array($block->getTypeId(), $this->logTypes)) {
 			$treeBlocks = $this->getTreeBlocks($block);
 			$world = $block->getPosition()->getWorld();
 			$leaves = [];
@@ -72,12 +107,16 @@ class Main extends PluginBase implements Listener {
 		}
 	}
 
+	/**
+	 * @param Block $block
+	 * @return array
+	 */
 	private function getTreeBlocks(Block $block): array {
 		$world = $block->getPosition()->getWorld();
 		$blocks = [$block];
 		for ($y = $block->getPosition()->getY() - 1; $y >= $world->getMinY(); $y--) {
 			$blockBelow = $world->getBlock(new Vector3($block->getPosition()->getX(), $y, $block->getPosition()->getZ()));
-			if ($blockBelow->getTypeId() == VanillaBlocks::OAK_LOG()->getTypeId() || VanillaBlocks::SPRUCE_LOG()->getTypeId() || VanillaBlocks::BIRCH_LOG()->getTypeId() || VanillaBlocks::JUNGLE_LOG()->getTypeId() || VanillaBlocks::ACACIA_LOG()->getTypeId() || VanillaBlocks::DARK_OAK_LOG()->getTypeId()) {
+			if (in_array($blockBelow->getTypeId(), $this->logTypes)) {
 				$blocks[] = $blockBelow;
 			} else {
 				break;
@@ -85,7 +124,7 @@ class Main extends PluginBase implements Listener {
 		}
 		for ($y = $block->getPosition()->getY() + 1; $y <= $world->getMaxY(); $y++) {
 			$blockAbove = $world->getBlock(new Vector3($block->getPosition()->getX(), $y, $block->getPosition()->getZ()));
-			if ($blockAbove->getTypeId() == VanillaBlocks::OAK_LOG()->getTypeId() || VanillaBlocks::SPRUCE_LOG()->getTypeId() || VanillaBlocks::BIRCH_LOG()->getTypeId() || VanillaBlocks::JUNGLE_LOG()->getTypeId() || VanillaBlocks::ACACIA_LOG()->getTypeId() || VanillaBlocks::DARK_OAK_LOG()->getTypeId()) {
+			if (in_array($blockAbove->getTypeId(), $this->logTypes)) {
 				$blocks[] = $blockAbove;
 			} else {
 				break;
@@ -94,6 +133,10 @@ class Main extends PluginBase implements Listener {
 		return $blocks;
 	}
 
+	/**
+	 * @param Block $block
+	 * @return array
+	 */
 	private function getLeavesBlocks(Block $block): array {
 		$world = $block->getPosition()->getWorld();
 		$blocks = [];
@@ -109,7 +152,7 @@ class Main extends PluginBase implements Listener {
 				for ($y = $current->getPosition()->getY() - 1; $y <= $current->getPosition()->getY() + 1; $y++) {
 					for ($z = $current->getPosition()->getZ() - 1; $z <= $current->getPosition()->getZ() + 1; $z++) {
 						$leaf = $world->getBlock(new Vector3($x, $y, $z));
-						if ($leaf->getTypeId() == VanillaBlocks::OAK_LEAVES()->getTypeId() || VanillaBlocks::SPRUCE_LEAVES()->getTypeId() || VanillaBlocks::BIRCH_LEAVES()->getTypeId() || VanillaBlocks::JUNGLE_LEAVES()->getTypeId() || VanillaBlocks::ACACIA_LEAVES()->getTypeId() || VanillaBlocks::DARK_OAK_LEAVES()->getTypeId()){
+						if (in_array($leaf->getTypeId(), $this->leafTypes)) {
 							$blocks[] = $leaf;
 							$queue[] = $leaf;
 						}

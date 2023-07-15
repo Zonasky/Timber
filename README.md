@@ -24,7 +24,7 @@
 <p>You're all set! Players can now use Timber to instantly chop down trees.</p>
 
 <h2>Configuration</h2>
-<p>Timber comes with a configuration file config.yml that allows you to configure which worlds Timber works in and the message that players receive when they chop down a tree. To modify the configuration, simply edit the config.yml file in your PocketMine plugins/Timber directory.</p>
+<p>Timber comes with a configuration file config.yml that allows you to configure which worlds Timber works in and the message that players receive when they chop down a tree. To modify the configuration, simply edit the config.yml file in your PocketMine plugin_data/Timber directory.</p>
 
 <h2>Bugs and Issues</h2>
 <p>If you encounter any bugs or issues with Timber, please report them on the GitHub issues page.</p>

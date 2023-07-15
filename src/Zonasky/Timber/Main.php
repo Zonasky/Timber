@@ -72,7 +72,7 @@ class Main extends PluginBase implements Listener {
 		if (!$this->isTimberWorld($worldName)){
 			return;
 		}
-		if ($block->getTypeId() == VanillaBlocks::OAK_LOG()->getTypeId() || VanillaBlocks::SPRUCE_LOG()->getTypeId() || VanillaBlocks::BIRCH_LOG()->getTypeId() || VanillaBlocks::JUNGLE_LOG()->getTypeId() || VanillaBlocks::ACACIA_LOG()->getTypeId() || VanillaBlocks::DARK_OAK_LOG()->getTypeId() || VanillaBlocks::MANGROVE_LOG()->getTypeId() || VanillaBlocks::CHERRY_LOG()->getTypeId()) {
+		if ($block->getTypeId() == VanillaBlocks::OAK_LOG()->getTypeId() || VanillaBlocks::SPRUCE_LOG()->getTypeId() || VanillaBlocks::BIRCH_LOG()->getTypeId() || VanillaBlocks::JUNGLE_LOG()->getTypeId() || VanillaBlocks::ACACIA_LOG()->getTypeId() || VanillaBlocks::DARK_OAK_LOG()->getTypeId() || VanillaBlocks::MANGROVE_LOG()->getTypeId()) {
 			$treeBlocks = $this->getTreeBlocks($block);
 			$world = $block->getPosition()->getWorld();
 			$leaves = [];
@@ -98,7 +98,7 @@ class Main extends PluginBase implements Listener {
 		$blocks = [$block];
 		for ($y = $block->getPosition()->getY() - 1; $y >= $world->getMinY(); $y--) {
 			$blockBelow = $world->getBlock(new Vector3($block->getPosition()->getX(), $y, $block->getPosition()->getZ()));
-			if ($blockBelow->getTypeId() == VanillaBlocks::OAK_LOG()->getTypeId() || VanillaBlocks::SPRUCE_LOG()->getTypeId() || VanillaBlocks::BIRCH_LOG()->getTypeId() || VanillaBlocks::JUNGLE_LOG()->getTypeId() || VanillaBlocks::ACACIA_LOG()->getTypeId() || VanillaBlocks::DARK_OAK_LOG()->getTypeId() || VanillaBlocks::MANGROVE_LOG()->getTypeId() || VanillaBlocks::CHERRY_LOG()->getTypeId()) {
+			if ($blockBelow->getTypeId() == VanillaBlocks::OAK_LOG()->getTypeId() || VanillaBlocks::SPRUCE_LOG()->getTypeId() || VanillaBlocks::BIRCH_LOG()->getTypeId() || VanillaBlocks::JUNGLE_LOG()->getTypeId() || VanillaBlocks::ACACIA_LOG()->getTypeId() || VanillaBlocks::DARK_OAK_LOG()->getTypeId() || VanillaBlocks::MANGROVE_LOG()->getTypeId()) {
 				$blocks[] = $blockBelow;
 			} else {
 				break;
@@ -106,7 +106,7 @@ class Main extends PluginBase implements Listener {
 		}
 		for ($y = $block->getPosition()->getY() + 1; $y <= $world->getMaxY(); $y++) {
 			$blockAbove = $world->getBlock(new Vector3($block->getPosition()->getX(), $y, $block->getPosition()->getZ()));
-			if ($blockAbove->getTypeId() == VanillaBlocks::OAK_LOG()->getTypeId() || VanillaBlocks::SPRUCE_LOG()->getTypeId() || VanillaBlocks::BIRCH_LOG()->getTypeId() || VanillaBlocks::JUNGLE_LOG()->getTypeId() || VanillaBlocks::ACACIA_LOG()->getTypeId() || VanillaBlocks::DARK_OAK_LOG()->getTypeId() || VanillaBlocks::MANGROVE_LOG()->getTypeId() || VanillaBlocks::CHERRY_LOG()->getTypeId()) {
+			if ($blockAbove->getTypeId() == VanillaBlocks::OAK_LOG()->getTypeId() || VanillaBlocks::SPRUCE_LOG()->getTypeId() || VanillaBlocks::BIRCH_LOG()->getTypeId() || VanillaBlocks::JUNGLE_LOG()->getTypeId() || VanillaBlocks::ACACIA_LOG()->getTypeId() || VanillaBlocks::DARK_OAK_LOG()->getTypeId() || VanillaBlocks::MANGROVE_LOG()->getTypeId()) {
 				$blocks[] = $blockAbove;
 			} else {
 				break;
@@ -134,7 +134,7 @@ class Main extends PluginBase implements Listener {
 				for ($y = $current->getPosition()->getY() - 1; $y <= $current->getPosition()->getY() + 1; $y++) {
 					for ($z = $current->getPosition()->getZ() - 1; $z <= $current->getPosition()->getZ() + 1; $z++) {
 						$leaf = $world->getBlock(new Vector3($x, $y, $z));
-						if ($leaf->getTypeId() == VanillaBlocks::OAK_LEAVES()->getTypeId() || VanillaBlocks::SPRUCE_LEAVES()->getTypeId() || VanillaBlocks::BIRCH_LEAVES()->getTypeId() || VanillaBlocks::JUNGLE_LEAVES()->getTypeId() || VanillaBlocks::ACACIA_LEAVES()->getTypeId() || VanillaBlocks::DARK_OAK_LEAVES()->getTypeId() || VanillaBlocks::MANGROVE_LEAVES()->getTypeId() || VanillaBlocks::CHERRY_LEAVES()->getTypeId()){
+						if ($leaf->getTypeId() == VanillaBlocks::OAK_LEAVES()->getTypeId() || VanillaBlocks::SPRUCE_LEAVES()->getTypeId() || VanillaBlocks::BIRCH_LEAVES()->getTypeId() || VanillaBlocks::JUNGLE_LEAVES()->getTypeId() || VanillaBlocks::ACACIA_LEAVES()->getTypeId() || VanillaBlocks::DARK_OAK_LEAVES()->getTypeId() || VanillaBlocks::MANGROVE_LEAVES()->getTypeId()){
 							$blocks[] = $leaf;
 							$queue[] = $leaf;
 						}

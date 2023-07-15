@@ -106,7 +106,7 @@ class Main extends PluginBase implements Listener {
 		}
 		for ($y = $block->getPosition()->getY() + 1; $y <= $world->getMaxY(); $y++) {
 			$blockAbove = $world->getBlock(new Vector3($block->getPosition()->getX(), $y, $block->getPosition()->getZ()));
-			if ($blockAbove->getTypeId() == VanillaBlocks::OAK_LOG()->getTypeId() || VanillaBlocks::SPRUCE_LOG()->getTypeId() || VanillaBlocks::BIRCH_LOG()->getTypeId() || VanillaBlocks::JUNGLE_LOG()->getTypeId() || VanillaBlocks::ACACIA_LOG()->getTypeId() || VanillaBlocks::DARK_OAK_LOG()->getTypeId()) {
+			if ($blockAbove->getTypeId() == VanillaBlocks::OAK_LOG()->getTypeId() || VanillaBlocks::SPRUCE_LOG()->getTypeId() || VanillaBlocks::BIRCH_LOG()->getTypeId() || VanillaBlocks::JUNGLE_LOG()->getTypeId() || VanillaBlocks::ACACIA_LOG()->getTypeId() || VanillaBlocks::DARK_OAK_LOG()->getTypeId() || VanillaBlocks::MANGROVE_LOG()->getTypeId() || VanillaBlocks::CHERRY_LOG()->getTypeId()) {
 				$blocks[] = $blockAbove;
 			} else {
 				break;

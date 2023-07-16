@@ -113,59 +113,30 @@ class Main extends PluginBase implements Listener {
 
 				$treeBlocks = $this->getTreeBlocks($block);
 				$world = $block->getPosition()->getWorld();
-				$leaves = [];
-
-				new Async(function() use ($world, $treeBlocks, &$leaves) : void {
-
-					$promises = [];
-
-					$i = 1;
-					foreach ($treeBlocks as $treeBlock) {
-
-						$promises[] = new Promise(function($resolve) use ($world, $treeBlock, $i) : void {
-							System::setTimeout(function() use ($resolve, $world, $treeBlock) : void {
-								$resolve($world->useBreakOn($treeBlock->getPosition()));
-							}, $i * 100);
-						});
-
-						foreach ($this->getLeavesBlocks($treeBlock) as $leave) {
-							$leaves[] = $leave;
-						}
-
-						$i++;
-					}
-
-					foreach ($promises as $promise) {
-						Async::await($promise);
-					}
-				});
 
 				$leavesConfig = $this->getConfig()->get("leaves");
 
+				new Async(function() use ($world, $treeBlocks, &$leaves, $leavesConfig) : void {
 
-				if ($leavesConfig) {
+					foreach ($treeBlocks as $treeBlock) {
 
-					new Async(function() use ($world, $leaves) : void {
+						Async::await(new Promise(function($resolve) use ($world, $treeBlock) : void {
+							System::setTimeout(function() use ($resolve, $world, $treeBlock) : void {
+								$resolve($world->useBreakOn($treeBlock->getPosition()));
+							}, 0);
+						}));
 
-						$promises = [];
-
-						$i = 1;
-						foreach ($leaves as $leaf) {
-
-							$promises[] = new Promise(function($resolve) use ($world, $leaf, $i) : void {
-								System::setTimeout(function() use ($resolve, $world, $leaf) : void {
-									$resolve($world->useBreakOn($leaf->getPosition()));
-								}, $i * 100);
-							});
-
-							$i++;
+						if ($leavesConfig) {
+							foreach ($this->getLeavesBlocks($treeBlock) as $leaf) {
+								Async::await(new Promise(function($resolve) use ($world, $leaf) : void {
+									System::setTimeout(function() use ($resolve, $world, $leaf) : void {
+										$resolve($world->useBreakOn($leaf->getPosition()));
+									}, 0);
+								}));
+							}
 						}
-
-						foreach ($promises as $promise) {
-							Async::await($promise);
-						}
-					});
-				}
+					}
+				});
 			}
 		}
 	}

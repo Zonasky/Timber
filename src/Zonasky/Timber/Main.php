@@ -115,7 +115,7 @@ class Main extends PluginBase implements Listener {
 
 				$leavesConfig = $this->getConfig()->get("leaves");
 
-				new Async(function() use ($world, $treeBlocks, &$leaves, $leavesConfig) : void {
+				new Async(function() use ($world, $treeBlocks, $leavesConfig) : void {
 
 					foreach ($treeBlocks as $treeBlock) {
 

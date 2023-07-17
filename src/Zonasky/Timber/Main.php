@@ -7,39 +7,46 @@
  *  ██ ██ ██  ██ ███████ ███████   ████   ███████    ██
  *  ██ ██  ██ ██ ██   ██ ██   ██    ██    ██   ██    ██
  *  ██ ██   ████ ██   ██ ██   ██    ██    ██   ██    ██
-
  *
  * @author Inaayat
  * @link https://github.com/Inaay
  *
  */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Zonasky\Timber;
 
+use Generator;
 use pocketmine\block\Block;
 use pocketmine\block\VanillaBlocks;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\Listener;
 use pocketmine\math\Vector3;
 use pocketmine\plugin\PluginBase;
+use pocketmine\world\World;
+use Throwable;
+use vennv\vapm\Async;
+use vennv\vapm\Promise;
+use vennv\vapm\System;
+use vennv\vapm\VapmPMMP;
 
 class Main extends PluginBase implements Listener {
 
-	private $worlds;
+	private array $worlds;
 
 	/**
 	 * @return void
 	 */
-	public function onLoad(): void {
+	protected function onLoad() : void {
 		$this->saveDefaultConfig();
 	}
 
 	/**
 	 * @return void
 	 */
-	public function onEnable(): void {
+	protected function onEnable() : void {
+		VapmPMMP::init($this);
 		$this->getServer()->getPluginManager()->registerEvents($this, $this);
 		$this->loadConfig();
 	}
@@ -47,101 +54,159 @@ class Main extends PluginBase implements Listener {
 	/**
 	 * @return void
 	 */
-	private function loadConfig(): void {
+	private function loadConfig() : void {
 		$config = $this->getConfig();
 		$this->worlds = $config->get("worlds", []);
-
 	}
 
 	/**
 	 * @param string $worldName
 	 * @return bool
 	 */
-	private function isTimberWorld(string $worldName): bool {
+	private function isTimberWorld(string $worldName) : bool {
 		return in_array($worldName, $this->worlds);
+	}
+
+	private function isTreeBlock(Block $block) : bool {
+
+		$blocks = [
+			VanillaBlocks::OAK_LOG()->getTypeId(),
+			VanillaBlocks::SPRUCE_LOG()->getTypeId(),
+			VanillaBlocks::BIRCH_LOG()->getTypeId(),
+			VanillaBlocks::JUNGLE_LOG()->getTypeId(),
+			VanillaBlocks::ACACIA_LOG()->getTypeId(),
+			VanillaBlocks::DARK_OAK_LOG()->getTypeId(),
+			VanillaBlocks::MANGROVE_LOG()->getTypeId()
+		];
+
+		return in_array($block->getTypeId(), $blocks);
+	}
+
+	private function isLeavesBlock(Block $block) : bool {
+
+		$blocks = [
+			VanillaBlocks::OAK_LEAVES()->getTypeId(),
+			VanillaBlocks::SPRUCE_LEAVES()->getTypeId(),
+			VanillaBlocks::BIRCH_LEAVES()->getTypeId(),
+			VanillaBlocks::JUNGLE_LEAVES()->getTypeId(),
+			VanillaBlocks::ACACIA_LEAVES()->getTypeId(),
+			VanillaBlocks::DARK_OAK_LEAVES()->getTypeId(),
+			VanillaBlocks::MANGROVE_LEAVES()->getTypeId()
+		];
+
+		return in_array($block->getTypeId(), $blocks);
 	}
 
 	/**
 	 * @param BlockBreakEvent $event
 	 * @return void
+	 * @throws Throwable
 	 */
-	public function onBlockBreak(BlockBreakEvent $event): void {
-		$player = $event->getPlayer();
+	public function onBlockBreak(BlockBreakEvent $event) : void {
+
 		$block = $event->getBlock();
 		$worldName = $block->getPosition()->getWorld()->getFolderName();
-		if (!$this->isTimberWorld($worldName)){
-			return;
-		}
-		if ($block->getTypeId() == VanillaBlocks::OAK_LOG()->getTypeId() || VanillaBlocks::SPRUCE_LOG()->getTypeId() || VanillaBlocks::BIRCH_LOG()->getTypeId() || VanillaBlocks::JUNGLE_LOG()->getTypeId() || VanillaBlocks::ACACIA_LOG()->getTypeId() || VanillaBlocks::DARK_OAK_LOG()->getTypeId() || VanillaBlocks::MANGROVE_LOG()->getTypeId()) {
-			$treeBlocks = $this->getTreeBlocks($block);
-			$world = $block->getPosition()->getWorld();
-			$leaves = [];
-			foreach ($treeBlocks as $treeBlock) {
-				$world->useBreakOn($treeBlock->getPosition());
-				$leaves = array_merge($leaves, $this->getLeavesBlocks($treeBlock));
-			}
-			$leavesConfig = $this->getConfig()->get("leaves");
-			if ($leavesConfig) {
-				foreach ($leaves as $leaf) {
-					$world->useBreakOn($leaf->getPosition());
-				}
-			}
-		}
-	}
 
-	/**
-	 * @param Block $block
-	 * @return array
-	 */
-	private function getTreeBlocks(Block $block): array {
-		$world = $block->getPosition()->getWorld();
-		$blocks = [$block];
-		for ($y = $block->getPosition()->getY() - 1; $y >= $world->getMinY(); $y--) {
-			$blockBelow = $world->getBlock(new Vector3($block->getPosition()->getX(), $y, $block->getPosition()->getZ()));
-			if ($blockBelow->getTypeId() == VanillaBlocks::OAK_LOG()->getTypeId() || VanillaBlocks::SPRUCE_LOG()->getTypeId() || VanillaBlocks::BIRCH_LOG()->getTypeId() || VanillaBlocks::JUNGLE_LOG()->getTypeId() || VanillaBlocks::ACACIA_LOG()->getTypeId() || VanillaBlocks::DARK_OAK_LOG()->getTypeId() || VanillaBlocks::MANGROVE_LOG()->getTypeId()) {
-				$blocks[] = $blockBelow;
-			} else {
-				break;
-			}
-		}
-		for ($y = $block->getPosition()->getY() + 1; $y <= $world->getMaxY(); $y++) {
-			$blockAbove = $world->getBlock(new Vector3($block->getPosition()->getX(), $y, $block->getPosition()->getZ()));
-			if ($blockAbove->getTypeId() == VanillaBlocks::OAK_LOG()->getTypeId() || VanillaBlocks::SPRUCE_LOG()->getTypeId() || VanillaBlocks::BIRCH_LOG()->getTypeId() || VanillaBlocks::JUNGLE_LOG()->getTypeId() || VanillaBlocks::ACACIA_LOG()->getTypeId() || VanillaBlocks::DARK_OAK_LOG()->getTypeId() || VanillaBlocks::MANGROVE_LOG()->getTypeId()) {
-				$blocks[] = $blockAbove;
-			} else {
-				break;
-			}
-		}
-		return $blocks;
-	}
+		if ($this->isTimberWorld($worldName)) {
 
-	/**
-	 * @param Block $block
-	 * @return array
-	 */
-	private function getLeavesBlocks(Block $block): array {
-		$world = $block->getPosition()->getWorld();
-		$blocks = [];
-		$visited = [];
-		$queue = [$block];
-		while (!empty($queue)) {
-			$current = array_shift($queue);
-			if (in_array($current, $visited)) {
-				continue;
-			}
-			$visited[] = $current;
-			for ($x = $current->getPosition()->getX() - 1; $x <= $current->getPosition()->getX() + 1; $x++) {
-				for ($y = $current->getPosition()->getY() - 1; $y <= $current->getPosition()->getY() + 1; $y++) {
-					for ($z = $current->getPosition()->getZ() - 1; $z <= $current->getPosition()->getZ() + 1; $z++) {
-						$leaf = $world->getBlock(new Vector3($x, $y, $z));
-						if ($leaf->getTypeId() == VanillaBlocks::OAK_LEAVES()->getTypeId() || VanillaBlocks::SPRUCE_LEAVES()->getTypeId() || VanillaBlocks::BIRCH_LEAVES()->getTypeId() || VanillaBlocks::JUNGLE_LEAVES()->getTypeId() || VanillaBlocks::ACACIA_LEAVES()->getTypeId() || VanillaBlocks::DARK_OAK_LEAVES()->getTypeId() || VanillaBlocks::MANGROVE_LEAVES()->getTypeId()){
-							$blocks[] = $leaf;
-							$queue[] = $leaf;
+			if ($this->isTreeBlock($block)) {
+
+				$treeBlocks = $this->getTreeBlocks($block);
+				$world = $block->getPosition()->getWorld();
+
+				$leavesConfig = $this->getConfig()->get("leaves");
+
+				new Async(function() use ($world, $treeBlocks, &$leaves, $leavesConfig) : void {
+
+					foreach ($treeBlocks as $treeBlock) {
+
+						Async::await(new Promise(function($resolve) use ($world, $treeBlock) : void {
+							System::setTimeout(function() use ($resolve, $world, $treeBlock) : void {
+								$resolve($world->useBreakOn($treeBlock->getPosition()));
+							}, 0);
+						}));
+
+						if ($leavesConfig) {
+							foreach ($this->getLeavesBlocks($treeBlock) as $leaf) {
+								Async::await(new Promise(function($resolve) use ($world, $leaf) : void {
+									System::setTimeout(function() use ($resolve, $world, $leaf) : void {
+										$resolve($world->useBreakOn($leaf->getPosition()));
+									}, 0);
+								}));
+							}
 						}
+					}
+				});
+			}
+		}
+	}
+
+	/**
+	 * @param Block $block
+	 * @return Generator
+	 */
+	private function getTreeBlocks(Block $block) : Generator {
+
+		$world = $block->getPosition()->getWorld();
+
+		yield $block;
+
+		$checkBlock = function(World $world, Block $block, float|int $y): ?Block {
+
+			$blockBelow = $world->getBlock(new Vector3($block->getPosition()->getX(), $y, $block->getPosition()->getZ()));
+
+			if ($this->isTreeBlock($blockBelow)) {
+				return $blockBelow;
+			}
+
+			return null;
+		};
+
+		for ($y = $block->getPosition()->getY() - 1; $y >= $world->getMinY(); $y--) {
+
+			$check = $checkBlock($world, $block, $y);
+
+			if ($check !== null) {
+				yield $check;
+			} else {
+				break;
+			}
+		}
+
+		for ($y = $block->getPosition()->getY() + 1; $y <= $world->getMaxY(); $y++) {
+
+			$check = $checkBlock($world, $block, $y);
+
+			if ($check !== null) {
+				yield $check;
+			} else {
+				break;
+			}
+		}
+	}
+
+	/**
+	 * @param Block $block
+	 * @return Generator
+	 */
+	private function getLeavesBlocks(Block $block) : Generator {
+
+		$world = $block->getPosition()->getWorld();
+
+		for ($x = $block->getPosition()->getX() - 1; $x <= $block->getPosition()->getX() + 1; $x++) {
+
+			for ($y = $block->getPosition()->getY() - 1; $y <= $block->getPosition()->getY() + 1; $y++) {
+
+				for ($z = $block->getPosition()->getZ() - 1; $z <= $block->getPosition()->getZ() + 1; $z++) {
+
+					$leaf = $world->getBlock(new Vector3($x, $y, $z));
+
+					if ($this->isLeavesBlock($leaf)) {
+						yield $leaf;
 					}
 				}
 			}
 		}
-		return $blocks;
 	}
+
 }

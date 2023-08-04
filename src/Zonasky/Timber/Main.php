@@ -17,6 +17,7 @@ declare(strict_types = 1);
 
 namespace Zonasky\Timber;
 
+use Throwable;
 use Generator;
 use pocketmine\block\Block;
 use pocketmine\block\VanillaBlocks;
@@ -25,10 +26,8 @@ use pocketmine\event\Listener;
 use pocketmine\math\Vector3;
 use pocketmine\plugin\PluginBase;
 use pocketmine\world\World;
-use Throwable;
 use vennv\vapm\Async;
 use vennv\vapm\Promise;
-use vennv\vapm\System;
 use vennv\vapm\VapmPMMP;
 
 class Main extends PluginBase implements Listener {
@@ -116,22 +115,20 @@ class Main extends PluginBase implements Listener {
 
 				$leavesConfig = $this->getConfig()->get("leaves");
 
-				new Async(function() use ($world, $treeBlocks, &$leaves, $leavesConfig) : void {
+				new Async(function() use ($world, $treeBlocks, $leavesConfig) : void {
 
 					foreach ($treeBlocks as $treeBlock) {
 
 						Async::await(new Promise(function($resolve) use ($world, $treeBlock) : void {
-							System::setTimeout(function() use ($resolve, $world, $treeBlock) : void {
-								$resolve($world->useBreakOn($treeBlock->getPosition()));
-							}, 0);
+							$resolve($world->useBreakOn($treeBlock->getPosition()));
 						}));
 
 						if ($leavesConfig) {
+
 							foreach ($this->getLeavesBlocks($treeBlock) as $leaf) {
+
 								Async::await(new Promise(function($resolve) use ($world, $leaf) : void {
-									System::setTimeout(function() use ($resolve, $world, $leaf) : void {
-										$resolve($world->useBreakOn($leaf->getPosition()));
-									}, 0);
+									$resolve($world->useBreakOn($leaf->getPosition()));
 								}));
 							}
 						}

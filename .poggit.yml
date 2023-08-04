@@ -6,4 +6,8 @@ projects:
   Timber:
     icon: meta/icon.png
     path: ""
+    libs:
+        - src: VennDev/LibVapmPMMP/LibVapmPMMP
+          version: ^1.6
+          branch: "main"
 ...

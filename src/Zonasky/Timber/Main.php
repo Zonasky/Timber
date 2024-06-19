@@ -29,6 +29,8 @@ use pocketmine\world\World;
 use vennv\vapm\Async;
 use vennv\vapm\Promise;
 use vennv\vapm\VapmPMMP;
+use pocketmine\Player;
+
 
 class Main extends PluginBase implements Listener {
 
@@ -64,6 +66,18 @@ class Main extends PluginBase implements Listener {
 	 */
 	private function isTimberWorld(string $worldName) : bool {
 		return in_array($worldName, $this->worlds);
+	}
+	private function isTimberAxe(string $item): bool {
+		$no = false;
+		$yes = true;
+	$hand =	$this->getPlayer()->getItemInHand();
+		if ($hand === VanillaItems::IRON_AXE($this->getDisplayName("Timber Axe"))) {
+			return in_array($item, $yes);
+		}
+		else {
+			
+	return in_array($item, $no);
+		}
 	}
 
 	private function isTreeBlock(Block $block) : bool {
@@ -107,7 +121,7 @@ class Main extends PluginBase implements Listener {
 		$worldName = $block->getPosition()->getWorld()->getFolderName();
 
 		if ($this->isTimberWorld($worldName)) {
-
+// if ($this->isTimberAxe($item)) {
 			if ($this->isTreeBlock($block)) {
 
 				$treeBlocks = $this->getTreeBlocks($block);
@@ -133,6 +147,7 @@ class Main extends PluginBase implements Listener {
 							}
 						}
 					}
+				
 				});
 			}
 		}
@@ -186,6 +201,7 @@ class Main extends PluginBase implements Listener {
 	 * @param Block $block
 	 * @return Generator
 	 */
+		
 	private function getLeavesBlocks(Block $block) : Generator {
 
 		$world = $block->getPosition()->getWorld();
